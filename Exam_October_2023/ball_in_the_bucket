@@ -1,0 +1,56 @@
+def results(total_sum):
+    prize = ''
+
+    if total_sum < 100:
+        return f"Sorry! You need {100 - total_sum} points more to win a prize."
+
+    elif 100 <= total_sum <= 199:
+        prize = 'Football'
+
+    elif 200 <= total_sum <= 299:
+        prize = 'Teddy Bear'
+
+    elif total_sum >= 300:
+        prize = 'Lego Construction Set'
+
+    return f"Good job! You scored {total_sum} points, and you've won {prize}."
+
+
+matrix_dimensions = 6
+
+matrix = []
+list_of_taken_positions = []
+total_sum = 0
+taken_position = []
+
+directions = [
+    (-1, 0),  # up
+    (1, 0),  # down
+]
+
+for r in range(matrix_dimensions):
+    matrix.append(input().split())
+
+for line in range(3):
+    tuple_str = input()
+    tuple_elements = tuple_str[1:-1].split(',')
+    current_throw = [int(elem.strip()) for elem in tuple_elements]
+
+    if not(0 <= current_throw[0] < matrix_dimensions and 0 <= current_throw[1] < matrix_dimensions):
+        continue
+
+    if matrix[current_throw[0]][current_throw[1]] == 'B':
+        current_bucket = [current_throw[0], current_throw[1]]
+        if current_bucket not in list_of_taken_positions :
+            for dr, dc in directions:
+                row, col = current_throw[0], current_throw[1]
+                while 0 <= row < matrix_dimensions and 0 <= col < matrix_dimensions:
+                    if matrix[row][col] != 'B':
+                        total_sum += int(matrix[row][col])
+                    row += dr
+                    col += dc
+            list_of_taken_positions.append(current_bucket)
+    else:
+        continue
+
+print(results(total_sum))
