@@ -1,0 +1,37 @@
+from collections import deque
+
+worms = deque(int(x) for x in input().split())
+holes = deque(int(y) for y in input().split())
+
+matches = 0
+suitable_holes = 0
+initial_length = len(worms)
+
+while worms and holes:
+    current_worm = worms.pop()
+    current_hole = holes.popleft()
+
+    if current_worm != current_hole:
+        current_worm-=3
+        if current_worm > 0:
+            worms.append(current_worm)
+    else:
+        matches += 1
+        suitable_holes += 1
+
+if matches >0:
+    print(f"Matches: {matches}")
+else:
+    print("There are no matches.")
+
+if not worms and suitable_holes == initial_length:
+    print("Every worm found a suitable hole!")
+elif not worms and suitable_holes!= initial_length:
+    print('Worms left: none')
+elif worms:
+    print(f"Worms left: {', '.join(map(str,worms))}")
+
+if not holes:
+    print("Holes left: none")
+elif holes:
+    print(f"Holes left: {', '.join(map(str,holes))}")
