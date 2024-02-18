@@ -1,0 +1,60 @@
+matrix_dimensions = int(input())
+matrix = []
+gambler_position = []
+
+initial_money = 100
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+for row in range(matrix_dimensions):
+    matrix.append(list(input()))
+
+    if 'G' in matrix[row]:
+        gambler_position = [row,matrix[row].index('G')]
+
+while True:
+    command = input()
+    if command == 'end':
+        break
+
+    matrix[gambler_position[0]][gambler_position[1]] = '-'
+
+    r = gambler_position[0] + directions[command][0]
+    c = gambler_position[1] + directions[command][1]
+
+    gambler_position = [r,c]
+
+    if not(0 <= r < matrix_dimensions and 0 <= c < matrix_dimensions):
+        initial_money = 0
+        print("Game over! You lost everything!")
+        break
+
+    elif matrix[r][c] == 'J':
+        initial_money += 100000
+        matrix[r][c] = 'G'
+        print("You win the Jackpot!")
+        break
+
+    elif matrix[r][c] == "W":
+        initial_money += 100
+
+    elif matrix[r][c] == 'P':
+        initial_money -= 200
+        if initial_money <= 0:
+            matrix[r][c] = 'G'
+            print("Game over! You lost everything!")
+            break
+
+    matrix[r][c] = 'G'
+
+if initial_money > 0:
+    print(f"End of the game. Total amount: {initial_money}$")
+
+if initial_money > 0:
+    for row in matrix:
+        print("".join(row))
