@@ -1,0 +1,68 @@
+def move(command):
+
+    r = boy_position[0] + directions[command][0]
+    c = boy_position[1] + directions[command][1]
+
+    return [r,c]
+
+
+def output():
+    if not out_of_matrix:
+        matrix[starting_position[0]][starting_position[1]] = 'B'
+
+    else:
+        print('The delivery is late. Order is canceled.')
+        matrix[starting_position[0]][starting_position[1]] = ' '
+
+    for row in matrix:
+        print("".join(row))
+
+
+matrix_dimensions = [int(x) for x in input().split()]
+
+matrix = []
+boy_position = []
+starting_position = []
+out_of_matrix = False
+
+for row in range(matrix_dimensions[0]):
+    matrix.append(list(input()))
+
+    if 'B' in matrix[row]:
+        boy_position = [row, matrix[row].index('B')]
+        starting_position = boy_position
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+while True:
+    command = input()
+
+    one_position_back = boy_position[0],boy_position[1]
+
+    boy_position = move(command)
+
+    if not (0 <= boy_position[0] < matrix_dimensions[0] and 0 <= boy_position[1] < matrix_dimensions[1]):
+        out_of_matrix = True
+        break
+
+    elif matrix[boy_position[0]][boy_position[1]] == 'A':
+        print('Pizza is delivered on time! Next order...')
+        matrix[boy_position[0]][boy_position[1]] = 'P'
+        break
+
+    elif matrix[boy_position[0]][boy_position[1]] == 'P':
+        print('Pizza is collected. 10 minutes for delivery.')
+        matrix[boy_position[0]][boy_position[1]] = 'R'
+
+    elif matrix[boy_position[0]][boy_position[1]] == '*':
+        boy_position = [one_position_back[0],one_position_back[1]]
+
+    elif matrix[boy_position[0]][boy_position[1]] == '-':
+        matrix[boy_position[0]][boy_position[1]] = '.'
+
+output()
