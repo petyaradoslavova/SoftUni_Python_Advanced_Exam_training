@@ -1,0 +1,35 @@
+def gather_credits(needed_credits, *args):
+
+    list_of_courses = []
+    credits_made = 0
+    result = ''
+
+    for arg in args:
+        current_course, credits_per_course = arg
+        if current_course not in list_of_courses:
+            if credits_made < needed_credits:
+                credits_made += credits_per_course
+                list_of_courses.append(current_course)
+            else:
+                break
+        else:
+            continue
+
+    sorted_result = sorted(list_of_courses,key=lambda kvp: (kvp[0]))
+
+    result += ', '.join(map(str,sorted_result))
+
+    if credits_made >= needed_credits:
+        return f"Enrollment finished! Maximum credits: {credits_made}.\nCourses: {result}"
+    else:
+        return f"You need to enroll in more courses! You have to gather {needed_credits-credits_made} credits more."
+
+
+print(gather_credits(
+    60,
+    ("Basics", 27),
+    ("Fundamentals", 27),
+    ("Advanced", 30),
+    ("Web", 30)
+))
+
