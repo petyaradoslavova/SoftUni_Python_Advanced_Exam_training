@@ -1,0 +1,50 @@
+matrix_dimensions = int(input())
+
+commands = input().split(', ')
+matrix = []
+squirrel_position = []
+total_hazelnuts = 3
+collected_hazelnuts = 0
+
+finish_after_all_commands = True
+
+directions = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1), }
+
+for row in range(matrix_dimensions):
+    matrix.append(list(input()))
+
+    if 's' in matrix[row]:
+        squirrel_position = [row, matrix[row].index('s')]
+        matrix[squirrel_position[0]][squirrel_position[1]] = '*'
+
+for command in commands:
+    r = squirrel_position[0] + directions[command][0]
+    c = squirrel_position[1] + directions[command][1]
+
+    squirrel_position = [r,c]
+
+    if not (0 <= r < matrix_dimensions and 0 <= c < matrix_dimensions):
+        print("The squirrel is out of the field.")
+        finish_after_all_commands = False
+        break
+
+    elif matrix[r][c] == 'h':
+        collected_hazelnuts += 1
+        matrix[r][c] = '*'
+        if collected_hazelnuts == total_hazelnuts:
+            print("Good job! You have collected all hazelnuts!")
+            break
+
+    elif matrix[r][c] == 't':
+        print("Unfortunately, the squirrel stepped on a trap...")
+        finish_after_all_commands = False
+        break
+
+if finish_after_all_commands and collected_hazelnuts < total_hazelnuts:
+    print("There are more hazelnuts to collect.")
+
+print(f"Hazelnuts collected: {collected_hazelnuts}")
