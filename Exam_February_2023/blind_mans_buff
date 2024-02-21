@@ -1,0 +1,62 @@
+def move(command):
+    matrix[blind_position[0]][blind_position[1]] = '-'
+
+    r = blind_position[0] + directions[command][0]
+    c = blind_position[1] + directions[command][1]
+
+    return [r, c]
+
+
+def final_output():
+    matrix[blind_position[0]][blind_position[1]] = 'B'
+
+    print("Game over!")
+    print(f"Touched opponents: {opponent_touched} Moves made: {moves_made}")
+
+
+matrix_dimensions = [int(x) for x in input().split()]
+
+matrix = []
+blind_position = []
+moves_made = 0
+opponent_touched = 0
+max_opponents = 3
+
+for row in range(matrix_dimensions[0]):
+    matrix.append((input()).split())
+
+    if 'B' in matrix[row]:
+        blind_position = [row, matrix[row].index('B')]
+
+directions = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+while True:
+    command = input()
+    if command == 'Finish':
+        break
+
+    step_back = blind_position[0],blind_position[1]
+
+    blind_position = move(command)
+
+    if not (0 <= blind_position[0] < matrix_dimensions[0] and 0 <= blind_position[1] < matrix_dimensions[1]) or\
+            matrix[blind_position[0]][blind_position[1]] == 'O':
+        blind_position = [step_back[0],step_back[1]]
+
+    elif matrix[blind_position[0]][blind_position[1]] == 'P':
+        opponent_touched += 1
+        moves_made += 1
+        if opponent_touched == max_opponents:
+            break
+
+    elif matrix[blind_position[0]][blind_position[1]] == '-':
+        moves_made += 1
+
+    matrix[blind_position[0]][blind_position[1]] = 'B'
+
+final_output()
