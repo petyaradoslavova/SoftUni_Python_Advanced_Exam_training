@@ -1,0 +1,57 @@
+def move(command):
+    matrix[submarine_position[0]][submarine_position[1]] = '-'
+
+    r = submarine_position[0] + directions[command][0]
+    c = submarine_position[1] + directions[command][1]
+
+    return [r, c]
+
+
+def final_output():
+    matrix[submarine_position[0]][submarine_position[1]] = 'S'
+
+    for row in matrix:
+        print(''.join(row))
+
+
+matrix_dimensions = int(input())
+
+submarine_position = []
+matrix = []
+CRUISER_COUNT = 3
+cruiser_defeated = 0
+DEFENCE_POWERS = 3
+
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+for row in range(matrix_dimensions):
+    matrix.append(list(input()))
+
+    if 'S' in matrix[row]:
+        submarine_position = [row,matrix[row].index('S')]
+
+while True:
+    command = input()
+
+    submarine_position = move(command)
+
+    if matrix[submarine_position[0]][submarine_position[1]] == 'C':
+        cruiser_defeated += 1
+        if cruiser_defeated == CRUISER_COUNT:
+            print("Mission accomplished, U-9 has destroyed all battle cruisers of the enemy!")
+            break
+
+    elif matrix[submarine_position[0]][submarine_position[1]] == '*':
+        DEFENCE_POWERS -= 1
+        if DEFENCE_POWERS == 0:
+            print(f"Mission failed, U-9 disappeared! Last known coordinates"
+                  f" [{submarine_position[0]}, {submarine_position[1]}]!")
+            break
+
+final_output()
