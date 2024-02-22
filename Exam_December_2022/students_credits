@@ -1,0 +1,25 @@
+def students_credits(*args):
+
+    result = ''
+    dictionary = {}
+    CREDITS_FOR_DIPLOMA = 240
+
+    for arg in args:
+        course_name, credits, max_test_points, diyan_points = arg.split('-')
+        current_grade = int(credits) * (int(diyan_points)/int(max_test_points))
+        dictionary[course_name] = current_grade
+
+    sorted_results = sorted(
+        dictionary.items(),
+        key=lambda x: (-(x[1]), x[0])
+    )
+
+    total_credits = sum(dictionary.values())
+
+    for key, value in sorted_results:
+        result += f'{key} - {value:.1f}\n'
+
+    if total_credits >= CREDITS_FOR_DIPLOMA:
+        return f"Diyan gets a diploma with {total_credits:.1f} credits.\n{result}"
+    else:
+        return f"Diyan needs {(CREDITS_FOR_DIPLOMA - total_credits):.1f} credits more for a diploma.\n{result}"
