@@ -1,0 +1,67 @@
+def final_output():
+
+    if not finished:
+        print(f'Racing car {tracking_number} DNF.')
+
+    print(f"Distance covered {passed_kilometers} km.")
+
+    for row in matrix:
+        print("".join(row))
+
+
+matrix_dimension = int(input())
+
+tracking_number = input()
+
+matrix = []
+car_position = [0,0]
+passed_kilometers = 0
+list_of_tunnel = []
+
+finished = False
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+for row in range(matrix_dimension):
+    matrix.append(input().split())
+
+    if 'T' in matrix[row]:
+        tunnel = (row,matrix[row].index('T'))
+        list_of_tunnel.append(tunnel)
+
+while True:
+    command = input()
+    if command == 'End':
+        break
+
+    matrix[car_position[0]][car_position[1]] = '.'
+
+    r = car_position[0] + directions[command][0]
+    c = car_position[1] + directions[command][1]
+
+    car_position = [r, c]
+
+    if matrix[r][c] == '.':
+        passed_kilometers += 10
+
+    elif matrix[r][c] == 'T':
+        passed_kilometers += 30
+        list_of_tunnel.remove((r,c))
+        car_position = [list_of_tunnel[0][0],list_of_tunnel[0][1]]
+
+    elif matrix[r][c] == 'F':
+        passed_kilometers += 10
+        finished = True
+        print(f"Racing car {tracking_number} finished the stage!")
+        break
+
+    matrix[r][c] = '.'
+
+matrix[car_position[0]][car_position[1]] = 'C'
+
+final_output()
