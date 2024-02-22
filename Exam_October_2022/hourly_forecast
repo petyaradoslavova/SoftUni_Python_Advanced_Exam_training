@@ -1,0 +1,42 @@
+def forecast(*args):
+
+    dictionary_of_cities = {}
+    final_result = ''
+
+    desired_order = ['Sunny', 'Cloudy', 'Rainy']
+
+    for arg in args:
+        city, weather = arg
+        dictionary_of_cities[city] = weather
+
+    sorted_result = sorted(
+        dictionary_of_cities.items(),
+        key=lambda x: (desired_order.index(x[1]), x[0])
+    )
+
+    for key, value in sorted_result:
+        final_result += f'{key} - {value}\n'
+
+    return final_result
+
+
+
+print(forecast(
+    ("Beijing", "Sunny"),
+    ("Hong Kong", "Rainy"),
+    ("Tokyo", "Sunny"),
+    ("Sofia", "Cloudy"),
+    ("Peru", "Sunny"),
+    ("Florence", "Cloudy"),
+    ("Bourgas", "Sunny")))
+
+
+print(forecast(
+    ("Tokyo", "Rainy"),
+    ("Sofia", "Rainy")))
+
+
+print(forecast(
+    ("Sofia", "Sunny"),
+    ("London", "Cloudy"),
+    ("New York", "Sunny")))
