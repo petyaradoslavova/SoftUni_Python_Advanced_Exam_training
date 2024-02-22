@@ -1,0 +1,38 @@
+from collections import deque
+
+
+def output_messages():
+    if conquered_peaks == 5:
+        print("Alex did it! He climbed all top five Pirin peaks in one week -> @FIVEinAWEEK")
+
+    else:
+        print("Alex failed! He has to organize his journey better next time -> @PIRINWINS")
+
+    if conquered_peaks:
+        print("Conquered peaks:")
+        for conquered_peak in list_of_conquered_peaks:
+            print(conquered_peak)
+
+
+food_supplies = list(int(x) for x in input().split(","))
+quantities_of_daily_stamina = deque(int(y) for y in input().split(","))
+
+dictionary_of_peaks = {'Vihren': 80, 'Kutelo': 90, 'Banski Suhodol': 100, 'Polezhan': 60, 'Kamenitza': 70}
+list_of_conquered_peaks = []
+conquered_peaks = 0
+
+for peak, value in dictionary_of_peaks.items():
+    while food_supplies and quantities_of_daily_stamina:
+
+        current_food = food_supplies.pop()
+        current_stamina = quantities_of_daily_stamina.popleft()
+
+        result = current_food + current_stamina
+        if result >= value:
+            list_of_conquered_peaks.append(peak)
+            conquered_peaks += 1
+            break
+        else:
+            continue
+
+output_messages()
