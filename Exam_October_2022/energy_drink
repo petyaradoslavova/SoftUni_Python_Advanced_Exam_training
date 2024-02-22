@@ -1,0 +1,41 @@
+from collections import deque
+
+
+def result_handling():
+    global taken_caffeine
+
+    if taken_caffeine + result <= MAX_CAFFEINE_INTAKE:
+        taken_caffeine += result
+
+    else:
+        number_of_energy_drinks.append(current_energy_drink)
+        if taken_caffeine >= 30:
+            taken_caffeine -= 30
+
+
+def final_output():
+
+    if number_of_energy_drinks:
+        print(f"Drinks left: {', '.join(map(str, number_of_energy_drinks))}")
+    else:
+        print("At least Stamat wasn't exceeding the maximum caffeine.")
+
+    print(f"Stamat is going to sleep with {taken_caffeine} mg caffeine.")
+
+
+milligrams_of_caffeine = list(int(x) for x in input().split(', '))
+number_of_energy_drinks = deque(int(y) for y in input().split(', '))
+
+MAX_CAFFEINE_INTAKE = 300
+taken_caffeine = 0
+
+while milligrams_of_caffeine and number_of_energy_drinks:
+
+    current_caffeine = milligrams_of_caffeine.pop()
+    current_energy_drink = number_of_energy_drinks.popleft()
+
+    result = current_caffeine * current_energy_drink
+
+    result_handling()
+
+final_output()
