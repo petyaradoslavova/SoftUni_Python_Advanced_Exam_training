@@ -1,0 +1,44 @@
+def move(direction):
+    r = init_pos[0] + directions[direction][0]
+    c = init_pos[1] + directions[direction][1]
+
+    return [r, c]
+
+
+def conditions_handling(command,init_pos):
+
+    if matrix[init_pos[0]][init_pos[1]] != '.':
+        if command[0] == 'Delete':
+            matrix[init_pos[0]][init_pos[1]] = '.'
+            
+        elif command[0] == 'Read':
+            print(matrix[init_pos[0]][init_pos[1]])
+            
+        elif command[0] == 'Update':
+            matrix[init_pos[0]][init_pos[1]] = command[2]
+
+    elif matrix[init_pos[0]][init_pos[1]] == '.' and command[0] == 'Create':
+        matrix[init_pos[0]][init_pos[1]] = command[2]
+
+
+MATRIX_DIMENSIONS = 6
+
+matrix = [[n for n in input().split()] for _ in range(MATRIX_DIMENSIONS)]
+init_pos = [int(x) for x in input() if x.isdigit()]
+
+directions = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+while True:
+    command = input().split(', ')
+    if command[0] == 'Stop':
+        break
+
+    init_pos = move(command[1])
+    conditions_handling(command, init_pos)
+
+[print(*row) for row in matrix]
