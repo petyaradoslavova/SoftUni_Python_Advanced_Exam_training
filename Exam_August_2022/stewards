@@ -1,0 +1,30 @@
+from collections import deque
+
+seats = input().split(', ')
+first_sequence = deque(int(x) for x in input().split(', '))
+second_sequence= deque(int(y) for y in input().split(', '))
+
+seat_matches = []
+rotations_count = 0
+
+while len(seat_matches) < 3 and rotations_count < 10:
+
+    num_from_first_seq = first_sequence.popleft()
+    num_from_second_seq = second_sequence.pop()
+
+    result = chr(num_from_first_seq + num_from_second_seq)
+
+    combination_list = [str(num_from_first_seq)+result, str(num_from_second_seq)+result]
+    rotations_count += 1
+
+    for combination in combination_list:
+        if combination in seats:
+            seats.remove(combination)
+            seat_matches.append(combination)
+            break
+    else:
+        first_sequence.append(num_from_first_seq)
+        second_sequence.appendleft(num_from_second_seq)
+
+print(f'Seat matches: {", ".join(map(str,seat_matches))}')
+print(f'Rotations count: {rotations_count}')
