@@ -1,0 +1,78 @@
+import sys
+
+
+def move(command):
+    matrix[rover_position[0]][rover_position[1]] = '-'
+
+    r = rover_position[0] + directions[command][0]
+    c = rover_position[1] + directions[command][1]
+
+    return [r,c]
+
+
+def conditions_handling(rover_position):
+    global water_deposit,metal_deposit,concrete_deposit
+
+    if matrix[rover_position[0]][rover_position[1]] == 'W':
+        water_deposit += 1
+        print(f'Water deposit found at ({rover_position[0]}, {rover_position[1]})')
+
+    elif matrix[rover_position[0]][rover_position[1]] == 'M':
+        metal_deposit += 1
+        print(f"Metal deposit found at ({rover_position[0]}, {rover_position[1]})")
+
+    elif matrix[rover_position[0]][rover_position[1]] == 'C':
+        concrete_deposit += 1
+        print(f"Concrete deposit found at ({rover_position[0]}, {rover_position[1]})")
+
+    elif matrix[rover_position[0]][rover_position[1]] == 'R':
+        print(f"Rover got broken at ({rover_position[0]}, {rover_position[1]})")
+        final_statement()
+        sys.exit()
+
+
+def change_coordinates(position,size):
+    for i in range(2):
+        if position[i] < 0:
+            position[i] = size - 1
+        elif position[i] >= size:
+            position[i] = 0
+    return position
+
+
+def final_statement():
+    if metal_deposit > 0 and water_deposit > 0 and concrete_deposit > 0:
+        print("Area suitable to start the colony.")
+    else:
+        print("Area not suitable to start the colony.")
+
+
+matrix_dimensions = 6
+matrix = []
+water_deposit, concrete_deposit, metal_deposit = 0, 0, 0
+rover_position = []
+
+directions = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+for row in range(matrix_dimensions):
+    matrix.append(input().split())
+
+    if 'E' in matrix[row]:
+        rover_position = [row,matrix[row].index('E')]
+
+commands = [n for n in input().split(', ')]
+for command in commands:
+
+    rover_position = move(command)
+
+    if not (0 <= rover_position[0]< matrix_dimensions and 0 <= rover_position[1] < matrix_dimensions):
+        rover_position = change_coordinates(rover_position, matrix_dimensions)
+        conditions_handling(rover_position)
+    else:
+        conditions_handling(rover_position)
+
+final_statement()
