@@ -1,0 +1,43 @@
+def words_sorting(*args):
+
+    result = ''
+    total_sum = 0
+    dictionary_of_words = {}
+
+    for word in args:
+        sum_of_letters = 0
+        for letter in word:
+            sum_of_letters += (ord(letter))
+        dictionary_of_words[word] = sum_of_letters
+
+    total_sum = sum(dictionary_of_words.values())
+
+    sorted_results = sorted(dictionary_of_words.items(),
+                            key=lambda x: x[0] if total_sum % 2 == 0 else -x[1])
+
+    for key, value in sorted_results:
+        result += f'{key} - {value}\n'
+
+    return result
+
+
+print(
+    words_sorting(
+        'cacophony',
+        'accolade'
+  ))
+
+
+print(
+    words_sorting(
+        'escape',
+        'charm',
+        'eye'
+  ))
+
+print(
+    words_sorting(
+        'escape',
+        'charm',
+        'mythology'
+  ))
