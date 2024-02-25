@@ -1,0 +1,40 @@
+from collections import deque
+
+
+def output_messages():
+
+    if filled_boxes > 0:
+        print(f"Great! You filled {filled_boxes} boxes.")
+    else:
+        print("Sorry! You couldn't fill any boxes!")
+
+    if sizes_of_eggs:
+        print(f'Eggs left: {", ".join(map(str, sizes_of_eggs))}')
+
+    if papers_per_egg:
+        print(f'Pieces of paper left: {", ".join(map(str, papers_per_egg))}')
+
+
+sizes_of_eggs = deque(int(x) for x in input().split(', '))
+papers_per_egg = deque(int(y) for y in input().split(', '))
+
+ONE_BOX_SIZE = 50
+filled_boxes = 0
+
+while sizes_of_eggs and papers_per_egg:
+
+    current_egg = sizes_of_eggs.popleft()
+    current_paper = papers_per_egg.pop()
+
+    if current_egg <= 0:
+        papers_per_egg.append(current_paper)
+
+    elif current_egg == 13:
+        papers_per_egg.append(current_paper)
+        papers_per_egg[0], papers_per_egg[-1] = papers_per_egg[-1], papers_per_egg[0]
+
+    else:
+        if current_paper + current_egg <= ONE_BOX_SIZE:
+            filled_boxes += 1
+
+output_messages()
