@@ -1,0 +1,47 @@
+MATRIX_DIMENSIONS = 6
+
+matrix = []
+
+characters = input().split(', ')
+first_character, second_character = characters
+turns = 0
+next_blocked_move_for_first_pl = 0
+next_blocked_move_for_second_pl = 0
+
+for row in range(MATRIX_DIMENSIONS):
+    matrix.append(input().split())
+
+while True:
+    coordinates = [int(x) for x in input() if x.isdigit()]
+    turns += 1
+
+    # first_player
+    if turns % 2 != 0 and turns != next_blocked_move_for_first_pl:
+        row1, col1 = coordinates
+
+        if matrix[row1][col1] == 'E':
+            print(f'{first_character} found the Exit and wins the game!')
+            break
+        elif matrix[row1][col1] == 'T':
+            print(f"{first_character} is out of the game! The winner is {second_character}.")
+            break
+        elif matrix[row1][col1] == 'W':
+            next_blocked_odd = turns + 2
+            print(f"{first_character} hits a wall and needs to rest.")
+
+    # second_player
+    elif turns % 2 == 0 and turns != next_blocked_move_for_second_pl:
+        row2, col2 = coordinates
+
+        if matrix[row2][col2] == 'E':
+            print(f'{second_character} found the Exit and wins the game!')
+            break
+        elif matrix[row2][col2] == 'T':
+            print(f'{second_character} is out of the game! The winner is {first_character}.')
+            break
+        elif matrix[row2][col2] == 'W':
+            next_blocked_even = turns + 2
+            print(f"{second_character} hits a wall and needs to rest.")
+            
+    else:
+        continue
