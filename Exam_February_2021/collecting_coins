@@ -1,0 +1,67 @@
+from math import floor
+
+matrix_dimensions = int(input())
+
+matrix = []
+collector_position = []
+collected_coins = 0
+positions_list = []
+already_taken_path = []
+
+game_over = False
+all_collected = False
+
+for r in range(matrix_dimensions):
+    matrix.append(input().split())
+
+    if 'P' in matrix[r]:
+        collector_position = [r, matrix[r].index('P')]
+        positions_list.append(collector_position)
+
+
+direction = input()
+while collected_coins < 100 or matrix[collector_position[0]][collector_position[1]] != 'X':
+
+    if direction not in ['right', 'up', 'left', 'down']:
+        continue
+
+    steps = 1
+    row, col = collector_position
+
+    while steps > 0:
+        if direction == 'right':
+            col = (col + 1) % matrix_dimensions
+        elif direction == 'left':
+            col = (col - 1 + matrix_dimensions) % matrix_dimensions
+        elif direction == 'up':
+            row = (row - 1 + matrix_dimensions) % matrix_dimensions
+        elif direction == 'down':
+            row = (row + 1) % matrix_dimensions
+
+        positions_list.append([row, col])
+        collector_position = [row, col]
+
+        if matrix[row][col].isdigit() and [row, col] not in already_taken_path:
+            collected_coins += int(matrix[row][col])
+            if collected_coins >= 100:
+                print(f"You won! You've collected {collected_coins} coins.")
+                all_collected = True
+                break
+
+        elif matrix[row][col] == 'X':
+            collected_coins /= 2
+            print(f"Game over! You've collected {floor(collected_coins)} coins.")
+            game_over = True
+            break
+
+        already_taken_path.append([row, col])
+        steps -= 1
+
+    if game_over or all_collected:
+        break
+
+    direction = input()
+
+print('Your path:')
+for path in positions_list:
+    print(path)
