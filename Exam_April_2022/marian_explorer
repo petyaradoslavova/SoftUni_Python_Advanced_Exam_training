@@ -1,6 +1,3 @@
-import sys
-
-
 def move(command):
     matrix[rover_position[0]][rover_position[1]] = '-'
 
@@ -10,28 +7,7 @@ def move(command):
     return [r,c]
 
 
-def conditions_handling(rover_position):
-    global water_deposit,metal_deposit,concrete_deposit
-
-    if matrix[rover_position[0]][rover_position[1]] == 'W':
-        water_deposit += 1
-        print(f'Water deposit found at ({rover_position[0]}, {rover_position[1]})')
-
-    elif matrix[rover_position[0]][rover_position[1]] == 'M':
-        metal_deposit += 1
-        print(f"Metal deposit found at ({rover_position[0]}, {rover_position[1]})")
-
-    elif matrix[rover_position[0]][rover_position[1]] == 'C':
-        concrete_deposit += 1
-        print(f"Concrete deposit found at ({rover_position[0]}, {rover_position[1]})")
-
-    elif matrix[rover_position[0]][rover_position[1]] == 'R':
-        print(f"Rover got broken at ({rover_position[0]}, {rover_position[1]})")
-        final_statement()
-        sys.exit()
-
-
-def change_coordinates(position,size):
+def change_coordinates(position, size):
     for i in range(2):
         if position[i] < 0:
             position[i] = size - 1
@@ -40,17 +16,21 @@ def change_coordinates(position,size):
     return position
 
 
-def final_statement():
-    if metal_deposit > 0 and water_deposit > 0 and concrete_deposit > 0:
-        print("Area suitable to start the colony.")
-    else:
-        print("Area not suitable to start the colony.")
+def check_deposit_or_rock(current_matrix, rover, current_deposits):
+    position = current_matrix[rover[0]][rover[1]]
+    if position in ['W', 'M', 'C']:
+        print(f"{current_deposits[position][0]} deposit found at ({rover[0]}, {rover[1]})")
+        current_deposits[position][1] += 1
+    elif position == 'R':
+        return 'broken'
+    return current_deposits
 
 
-matrix_dimensions = 6
+MATRIX_DIMENSIONS = 6
 matrix = []
-water_deposit, concrete_deposit, metal_deposit = 0, 0, 0
+deposits = {'W': ['Water', 0], 'M': ['Metal', 0], 'C': ['Concrete', 0]}
 rover_position = []
+is_broken = False
 
 directions = {
     'up': (-1, 0),
@@ -58,7 +38,7 @@ directions = {
     'left': (0, -1),
     'right': (0, 1),
 }
-for row in range(matrix_dimensions):
+for row in range(MATRIX_DIMENSIONS):
     matrix.append(input().split())
 
     if 'E' in matrix[row]:
@@ -69,10 +49,19 @@ for command in commands:
 
     rover_position = move(command)
 
-    if not (0 <= rover_position[0]< matrix_dimensions and 0 <= rover_position[1] < matrix_dimensions):
-        rover_position = change_coordinates(rover_position, matrix_dimensions)
-        conditions_handling(rover_position)
-    else:
-        conditions_handling(rover_position)
+    if not (0 <= rover_position[0]< MATRIX_DIMENSIONS and 0 <= rover_position[1] < MATRIX_DIMENSIONS):
+        rover_position = change_coordinates(rover_position, MATRIX_DIMENSIONS)
 
-final_statement()
+    result_after_checking_the_land = check_deposit_or_rock(matrix, rover_position, deposits)
+    if result_after_checking_the_land == 'broken':
+        is_broken = True
+        break
+    deposits = result_after_checking_the_land
+
+if is_broken:
+    print(f"Rover got broken at ({rover_position[0]}, {rover_position[1]})")
+    
+if deposits['W'][1] >= 1 and deposits['M'][1] >= 1 and deposits['C'][1] >= 1:
+    print("Area suitable to start the colony.")
+else:
+    print("Area not suitable to start the colony.")
