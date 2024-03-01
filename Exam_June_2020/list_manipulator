@@ -1,0 +1,35 @@
+def list_manipulator(list_of_nums, command, position, *args):
+    if command == 'add':
+
+        if position == 'beginning':
+            new_list = [arg for arg in args]
+            list_of_nums = new_list + list_of_nums
+
+        elif position == 'end':
+            list_of_nums += [arg for arg in args]
+
+    elif command == 'remove':
+
+        if position == 'beginning':
+            if args:
+                list_of_nums = [list_of_nums[arg:] for arg in args][-1]
+            else:
+                list_of_nums = list_of_nums[1:]
+
+        elif position == 'end':
+            if args:
+                list_of_nums = [list_of_nums[:-arg] for arg in args][-1]
+            else:
+                list_of_nums = list_of_nums[:-1]
+
+    return list_of_nums
+
+
+print(list_manipulator([1,2,3], "remove", "end"))
+print(list_manipulator([1,2,3], "remove", "beginning"))
+print(list_manipulator([1,2,3], "add", "beginning", 20))
+print(list_manipulator([1,2,3], "add", "end", 30))
+print(list_manipulator([1,2,3], "remove", "end", 2))
+print(list_manipulator([1,2,3], "remove", "beginning", ))
+print(list_manipulator([1,2,3], "add", "beginning", 20, 30, 40))
+print(list_manipulator([1,2,3], "add", "end", 30, 40, 50))
