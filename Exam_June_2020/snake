@@ -1,0 +1,56 @@
+matrix_dimensions = int(input())
+
+matrix = []
+snake_position = []
+lair_position = []
+list_of_the_lair_positions = []
+food_eaten = 0
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+for row in range(matrix_dimensions) :
+    matrix.append(list(input()))
+
+    if 'S' in matrix[row]:
+        snake_position = [row,matrix[row].index('S')]
+
+    if 'B' in matrix[row]:
+        lair_position = [row, matrix[row].index('B')]
+        list_of_the_lair_positions.append(lair_position)
+
+
+while True:
+    command = input()
+
+    matrix[snake_position[0]][snake_position[1]] = '.'
+
+    r = snake_position[0] + directions[command][0]
+    c = snake_position[1] + directions[command][1]
+
+    snake_position = [r, c]
+
+    if not (0 <= r < matrix_dimensions and 0 <= c < matrix_dimensions):
+        print("Game over!")
+        break
+
+    elif matrix[r][c] == '*':
+        food_eaten += 1
+        matrix[snake_position[0]][snake_position[1]] = 'S'
+        if food_eaten >= 10:
+            print("You won! You fed the snake.")
+            break
+
+    elif matrix[r][c] == 'B':
+        matrix[r][c] = '.'
+        list_of_the_lair_positions.remove([r, c])
+        snake_position = [list_of_the_lair_positions[0][0], list_of_the_lair_positions[0][1]]
+        matrix[snake_position[0]][snake_position[1]] = 'S'
+
+print(f"Food eaten: {food_eaten}")
+for row in matrix:
+    print("".join(row))
