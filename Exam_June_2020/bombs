@@ -1,0 +1,55 @@
+from collections import deque
+
+
+def conditions_handling():
+    if succeeded:
+        print("Bene! You have successfully filled the bomb pouch!")
+    else:
+        print("You don't have enough materials to fill the bomb pouch.")
+
+    if bomb_effect:
+        print(f"Bomb Effects: {', '.join(map(str, bomb_effect))}")
+    else:
+        print("Bomb Effects: empty")
+
+    if bomb_casing:
+        print(f"Bomb Casings: {', '.join(map(str, bomb_casing))}")
+    else:
+        print("Bomb Casings: empty")
+
+
+bomb_effect = deque(int(x) for x in input().split(','))
+bomb_casing = deque(int(y) for y in input().split(','))
+
+succeeded = False
+
+bombs_types_dictionary = {'Datura Bombs': 0, 'Cherry Bombs': 0, 'Smoke Decoy Bombs': 0}
+
+while bomb_effect and bomb_casing:
+
+    if bombs_types_dictionary['Datura Bombs'] >= 3 and\
+        bombs_types_dictionary['Smoke Decoy Bombs'] >= 3 and \
+            bombs_types_dictionary['Cherry Bombs'] >=3:
+        succeeded = True
+        break
+
+    current_effect = bomb_effect.popleft()
+    current_casing = bomb_casing.pop()
+
+    result = current_effect + current_casing
+
+    if result == 40:
+        bombs_types_dictionary['Datura Bombs'] += 1
+    elif result == 60:
+        bombs_types_dictionary['Cherry Bombs'] += 1
+    elif result == 120:
+        bombs_types_dictionary['Smoke Decoy Bombs'] += 1
+    else:
+        current_casing -= 5
+        bomb_casing.append(current_casing)
+        bomb_effect.appendleft(current_effect)
+
+conditions_handling()
+
+for key,value in sorted(bombs_types_dictionary.items()):
+    print(f"{key}: {value}")
