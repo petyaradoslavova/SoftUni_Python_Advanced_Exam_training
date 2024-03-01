@@ -1,0 +1,39 @@
+MATRIX_DIMENSIONS = 8
+
+matrix = []
+king_position = []
+list_of_queen_positions = []
+
+directions = [
+    (-1, 1),  # top-right
+    (-1, -1),  # top-left
+    (1, -1),  # bottom_left
+    (1, 1),  # bottom-right
+    (-1, 0),  # up
+    (1, 0),  # down
+    (0, 1),  # right
+    (0, -1),  # left
+]
+
+for row in range(MATRIX_DIMENSIONS):
+    matrix.append(input().split())
+
+    if 'K' in matrix[row]:
+        king_position = [row, matrix[row].index('K')]
+
+for row_index, col_index in directions:
+    row, col = king_position[0], king_position[1]
+    while 0 <= row < MATRIX_DIMENSIONS and 0 <= col < MATRIX_DIMENSIONS:
+        if matrix[row][col] == 'Q':
+            curr_queen = [row, col]
+            list_of_queen_positions.append(curr_queen)
+            break
+        row += row_index
+        col += col_index
+
+if list_of_queen_positions:
+    for position in list_of_queen_positions:
+        print(position)
+else:
+    print('The king is safe!')
+  
