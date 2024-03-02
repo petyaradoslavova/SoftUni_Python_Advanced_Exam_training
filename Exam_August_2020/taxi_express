@@ -1,0 +1,23 @@
+from collections import deque
+
+customers = deque(int(x) for x in input().split(', '))
+taxis = deque(int(y) for y in input().split(', '))
+
+total_time = 0
+
+while customers and taxis:
+    curr_customer = customers.popleft()
+    curr_taxi = taxis.pop()
+
+    if curr_taxi >= curr_customer:
+        total_time += curr_customer
+
+    else:
+        customers.appendleft(curr_customer)
+
+if not customers:
+    print('All customers were driven to their destinations')
+    print(f'Total time: {total_time} minutes')
+elif not taxis and customers:
+    print('Not all customers were driven to their destinations')
+    print(f'Customers left: {", ".join(map(str,customers))}')
