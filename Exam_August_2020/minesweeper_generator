@@ -1,0 +1,37 @@
+matrix_dimensions = int(input())
+number_of_bombs = int(input())
+
+directions = (
+    (-1,0),#up
+    (1,0),#down
+    (0,1),#right
+    (0,-1),#left
+    (-1,1),#top-right
+    (-1,-1),#top-left
+    (1,-1),#bottom_left
+    (1,1),#bottom-right
+)
+
+matrix = [[0 for _ in range(matrix_dimensions)] for _ in range(matrix_dimensions)]
+
+for bomb in range(number_of_bombs):
+    tuple_str = input()
+    tuple_elements = tuple_str[1:-1].split(',')
+    current_throw = [int(elem.strip()) for elem in tuple_elements]
+
+    matrix[current_throw[0]][current_throw[1]] = '*'
+
+for i in range(len(matrix)):
+    for j in range(len(matrix[i])):
+        if matrix[i][j] != "*":
+            char_position = [i, j]
+
+            for direction in directions:
+                r = char_position[0] + direction[0]
+                c = char_position[1] + direction[1]
+
+                if 0 <= r < matrix_dimensions and 0 <= c < matrix_dimensions:
+                    if matrix[r][c] == '*':
+                        matrix[char_position[0]][char_position[1]] += 1
+
+[print(*row) for row in matrix]
