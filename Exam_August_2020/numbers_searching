@@ -1,0 +1,17 @@
+from collections import Counter
+
+
+def numbers_searching(*args):
+    counter = Counter(list(args))
+    duplicates_list = [num for num, count in counter.items() if count > 1]
+
+    sorted_nums = sorted(set(args))
+    expected_sum = sum(range(sorted_nums[0], sorted_nums[-1]+1))
+    actual_sum = sum(sorted_nums)
+    missing_number = expected_sum - actual_sum
+
+    return [missing_number, [*sorted(duplicates_list)]]
+
+print(numbers_searching(1, 2, 4, 2, 5, 4))
+print(numbers_searching(5, 5, 9, 10, 7, 8, 7, 9))
+print(numbers_searching(50, 50, 47, 47, 48, 45, 49, 44, 47, 45, 44, 44, 48, 44, 48))
