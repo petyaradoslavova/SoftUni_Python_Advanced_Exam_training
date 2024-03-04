@@ -1,0 +1,48 @@
+def move(command):
+    matrix[player_position[0]][player_position[1]] = '-'
+
+    r = player_position[0] + directions[command][0]
+    c = player_position[1] + directions[command][1]
+
+    return [r,c]
+
+
+string = input()
+
+matrix_dimensions = int(input())
+matrix = []
+player_position = []
+
+directions = {
+    'up':  (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
+for row in range(matrix_dimensions):
+    matrix.append(list(input()))
+
+    if 'P' in matrix[row]:
+        player_position = [row,matrix[row].index('P')]
+
+for _ in range(int(input())):
+    command = input()
+
+    initial_position = player_position
+
+    player_position = move(command)
+
+    if not (0 <= player_position[0] < matrix_dimensions and 0<=player_position[1]<matrix_dimensions):
+        player_position = initial_position
+        if len(string) > 0:
+            string = string[:-1]
+
+    elif matrix[player_position[0]][player_position[1]] != '-':
+        string += matrix[player_position[0]][player_position[1]]
+
+    matrix[player_position[0]][player_position[1]] = 'P'
+
+print(string)
+for row in matrix:
+    print("".join(row))
