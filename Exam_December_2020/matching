@@ -1,0 +1,51 @@
+from collections import deque
+
+male = deque(int(y) for y in input().split())
+female = deque(int(x) for x in input().split())
+
+matches = 0
+
+while male and female:
+    curr_male = male.pop()
+    curr_female = female.popleft()
+
+    if curr_female <= 0:
+        male.append(curr_male)
+        continue
+
+    elif curr_male <= 0:
+        female.appendleft(curr_female)
+        continue
+
+    elif curr_female % 25 == 0 and curr_male % 25 == 0:
+        female.popleft()
+        male.pop()
+
+    elif curr_female % 25 == 0:
+        female.popleft()
+        male.append(curr_male)
+
+    elif curr_male % 25 == 0:
+        male.pop()
+        female.appendleft(curr_female)
+
+    elif curr_female == curr_male:
+        matches += 1
+
+    else:
+        curr_male -= 2
+        male.append(curr_male)
+
+
+print(f"Matches: {matches}")
+
+if not male:
+    print("Males left: none")
+else:
+    reversed_male = deque(reversed(male))
+    print(f"Males left: {', '.join(map(str, reversed_male))}")
+
+if not female:
+    print("Females left: none")
+else:
+    print(f"Females left: {', '.join(map(str, female))}")
