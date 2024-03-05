@@ -1,0 +1,35 @@
+from collections import deque
+
+
+orders = deque(int(x) for x in input().split(', '))
+employees = deque(int(y) for y in input().split(', '))
+
+completed_orders = 0
+
+while orders and employees:
+    current_oder = orders.popleft()
+    current_employee = employees.pop()
+
+    if current_oder <= 0:
+        employees.append(current_employee)
+        continue
+    elif current_oder > 10:
+        employees.append(current_employee)
+        continue
+
+    if current_oder <= current_employee:
+        completed_orders += current_oder
+    else:
+        current_oder-= current_employee
+        if len(employees) > 0:
+            completed_orders += current_employee
+        orders.appendleft(current_oder)
+
+if not orders:
+    print('All orders are successfully completed!')
+    print(f'Total pizzas made: {completed_orders}')
+    print(f'Employees: {", ".join(map(str,employees))}')
+
+if not employees and orders:
+    print('Not all orders are completed.')
+    print(f'Orders left: {", ".join(map(str,orders))}')
