@@ -1,0 +1,81 @@
+def find_total_sum(current_throw):
+    total_sum = 0
+    sum_of_current_col = 0
+    for col in matrix:
+        if col[current_throw[0]] not in symbols:
+            sum_of_current_col += int(col[current_throw[1]])
+
+    row = matrix[current_throw[0]]
+    total_sum += sum_of_current_col + int(row[0]) + int(row[-1])
+
+    if matrix[current_throw[0]][current_throw[1]] == 'D':
+        total_sum *= 2
+    elif matrix[current_throw[0]][current_throw[1]] == 'T':
+        total_sum *= 3
+
+    return total_sum
+
+
+MATRIX_DIMENSIONS = 7
+
+matrix = []
+turns = 0
+player1_start_score = 501
+player2_start_score = 501
+throws_pl_one = 0
+throws_pl_two = 0
+
+characters = input().split(', ')
+first_character, second_character = characters
+
+for row in range(MATRIX_DIMENSIONS):
+    matrix.append(input().split())
+
+symbols = ['B', 'T', 'D']
+
+while True:
+    tuple_str = input()
+    tuple_elements = tuple_str[1:-1].split(',')
+    current_throw = [int(elem.strip()) for elem in tuple_elements]
+
+    turns += 1
+
+    if turns % 2 != 0:
+        throws_pl_one += 1
+        if not(0 <= current_throw[0] < MATRIX_DIMENSIONS and 0<= current_throw[1]< MATRIX_DIMENSIONS):
+            continue
+
+        if matrix[current_throw[0]][current_throw[1]] == 'B':
+            print(f'{first_character} won the game with {throws_pl_one} throws!')
+            break
+
+        elif type(matrix[current_throw[0]][current_throw[1]]) == int:
+            player1_start_score -= int(matrix[current_throw[0]][current_throw[1]])
+
+        else:
+            total_sum = find_total_sum(current_throw)
+            player1_start_score -= total_sum
+
+        if player1_start_score <= 0:
+            print(f'{first_character} won the game with {throws_pl_one} throws!')
+            break
+
+    elif turns % 2 == 0:
+        throws_pl_two += 1
+        if not (0 <= current_throw[0] < MATRIX_DIMENSIONS and 0 <= current_throw[1] < MATRIX_DIMENSIONS):
+            continue
+
+        if matrix[current_throw[0]][current_throw[1]] == 'B':
+            print(f'{second_character} won the game with {throws_pl_two} throws!')
+            break
+
+        elif type(matrix[current_throw[0]][current_throw[1]]) == int:
+            player2_start_score -= int(matrix[current_throw[0]][current_throw[1]])
+
+        else:
+            total_sum = find_total_sum(current_throw)
+            player2_start_score -= total_sum
+
+        if player2_start_score <= 0:
+            print(f'{second_character} won the game with {throws_pl_two} throws!')
+            break
