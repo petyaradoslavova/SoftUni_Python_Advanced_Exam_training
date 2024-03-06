@@ -1,0 +1,48 @@
+def start_spring(**examples):
+
+    dictionary_of_objects = {}
+    result = ''
+
+    for item, type_of_item in examples.items():
+        if type_of_item not in dictionary_of_objects:
+            dictionary_of_objects[type_of_item] = [item]
+        else:
+            dictionary_of_objects[type_of_item].append(item)
+
+    sorted_dictionary_of_objects = sorted(dictionary_of_objects.items(),
+                                          key=lambda x: (-len(x[1]), x[0]))
+
+    for key, values in sorted_dictionary_of_objects:
+        result += f'{key}:\n'
+        for value in sorted(values):
+            result += f'-{value}\n'
+
+    return result
+
+
+example_objects = {"Water Lilly": "flower",
+                   "Swifts": "bird",
+                   "Callery Pear": "tree",
+                   "Swallows": "bird",
+                   "Dahlia": "flower",
+                   "Tulip": "flower",}
+print(start_spring(**example_objects))
+
+
+example_objects = {"Magnolia": "tree",
+                   "Swallow": "bird",
+                   "Thrushes": "bird",
+                   "Pear": "tree",
+                   "Cherries": "tree",
+                   "Shrikes": "bird",
+                   "Butterfly": "insect"}
+print(start_spring(**example_objects))
+
+
+example_objects = {"Swallow": "bird",
+                   "Thrushes": "bird",
+                   "Woodpeckers": "bird",
+                   "Swallows": "bird",
+                   "Warblers": "bird",
+                   "Shrikes": "bird",}
+print(start_spring(**example_objects))
