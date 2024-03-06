@@ -1,0 +1,41 @@
+from collections import deque
+
+vowels = deque(v for v in input().split())
+consonants = deque(c for c in input().split())
+
+words = {"rose", "tulip", "lotus", "daffodil"}
+copy_list_of_words = [[char for char in word] for word in words]
+removed_letters = ''
+needed_word = ''
+
+while vowels and consonants:
+    current_vowel = vowels.popleft()
+    current_constant = consonants.pop()
+
+    for combination in copy_list_of_words:
+
+        if current_constant in combination:
+            combination.remove(current_constant)
+            removed_letters += current_constant
+
+        if current_vowel in combination:
+            combination.remove(current_vowel)
+            removed_letters += current_vowel
+
+    if [] in copy_list_of_words:
+        break
+
+for w in words:
+    if set(w).issubset(removed_letters):
+        needed_word = w
+
+if not needed_word:
+    print("Cannot find any word!")
+else:
+    print(f"Word found: {needed_word}")
+
+if vowels:
+    print(f"Vowels left: {' '.join(map(str,vowels))}")
+
+if consonants:
+    print(f"Consonants left: {' '.join(map(str,consonants))}")
