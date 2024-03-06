@@ -14,11 +14,11 @@ while vowels and consonants:
 
     for combination in copy_list_of_words:
 
-        if current_constant in combination:
+        if set(current_constant).issubset(combination):
             combination.remove(current_constant)
             removed_letters += current_constant
 
-        if current_vowel in combination:
+        if set(current_vowel).issubset(combination):
             combination.remove(current_vowel)
             removed_letters += current_vowel
 
